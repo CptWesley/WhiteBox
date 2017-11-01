@@ -5,6 +5,7 @@ import lombok.Getter;
 import nl.cptwesley.whitebox.WhiteBoxDepth;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,22 @@ class VisibilityFilter {
             }
         }
         return constructors;
+    }
+
+    /**
+     * Gets a list of visible methods.
+     * @return List of visible methods.
+     */
+    List<Method> getMethods() {
+        List<Method> methods = new ArrayList<>();
+
+        for (Method method : target.getDeclaredMethods()) {
+            int modifier = method.getModifiers();
+            if (isVisible(modifier)) {
+                methods.add(method);
+            }
+        }
+        return methods;
     }
 
     /**
