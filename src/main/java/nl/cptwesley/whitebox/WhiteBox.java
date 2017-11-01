@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface WhiteBox {
-    String target();
+    String value();
     WhiteBoxDepth depth() default WhiteBoxDepth.Public;
 }
