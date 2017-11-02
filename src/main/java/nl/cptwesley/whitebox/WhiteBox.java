@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface WhiteBox {
     String value();
+    String target();
     WhiteBoxDepth depth() default WhiteBoxDepth.Public;
 }
