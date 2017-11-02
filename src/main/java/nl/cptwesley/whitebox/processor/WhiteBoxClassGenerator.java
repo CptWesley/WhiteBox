@@ -52,6 +52,11 @@ class WhiteBoxClassGenerator {
         return whiteBoxedClass.build().toString();
     }
 
+    /**
+     * Gets a constructor method spec.
+     * @param constructor Constructor to generate method spec for.
+     * @return Returns MethodSpec of the provided constructor.
+     */
     private MethodSpec getConstructorSpec(Constructor constructor) {
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC);
