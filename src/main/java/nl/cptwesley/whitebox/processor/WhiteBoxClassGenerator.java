@@ -17,15 +17,20 @@ class WhiteBoxClassGenerator {
 
     @Getter private Class target;
     @Getter private VisibilityFilter visibilityFilter;
+    @Getter private String name;
+    @Getter private String packageDestination;
 
     /**
      * Constructor for a white box class generator.
      * @param target Target class.
      * @param depth Depth to generate to.
      */
-    WhiteBoxClassGenerator(Class target, WhiteBoxDepth depth) {
+    WhiteBoxClassGenerator(Class target, WhiteBoxDepth depth,
+                           String name, String packageDestination) {
         this.target = target;
         this.visibilityFilter = new VisibilityFilter(target, depth);
+        this.name = name;
+        this.packageDestination = packageDestination;
     }
 
     /**
@@ -37,7 +42,7 @@ class WhiteBoxClassGenerator {
         List<Method> methods = visibilityFilter.getMethods();
 
         TypeSpec.Builder whiteBoxedClass = TypeSpec
-                .classBuilder("WhiteBoxedX")
+                .classBuilder(name)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addField(Object.class, "object", Modifier.PRIVATE);
 
@@ -49,7 +54,7 @@ class WhiteBoxClassGenerator {
             whiteBoxedClass.addMethod(getMethodSpec(method));
         }
 
-        return whiteBoxedClass.build().toString();
+        return "package " + packageDestination + ";\n" + whiteBoxedClass.build().toString();
     }
 
     /**
