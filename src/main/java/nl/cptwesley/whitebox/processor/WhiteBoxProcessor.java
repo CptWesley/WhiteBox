@@ -18,8 +18,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.util.Set;
@@ -30,13 +28,11 @@ import java.util.Set;
 @SupportedAnnotationTypes({
         "nl.cptwesley.whitebox.WhiteBox",
         "nl.cptwesley.whitebox.WhiteBoxes"
-})
+        })
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
 public class WhiteBoxProcessor extends AbstractProcessor {
 
-    private Types types;
-    private Elements elements;
     private Filer filer;
     private Messager messager;
 
@@ -46,8 +42,6 @@ public class WhiteBoxProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment environment) {
         super.init(environment);
-        this.types = environment.getTypeUtils();
-        this.elements = environment.getElementUtils();
         this.filer = environment.getFiler();
         this.messager = environment.getMessager();
     }
@@ -58,7 +52,6 @@ public class WhiteBoxProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment environment) {
         for (Element element : environment.getElementsAnnotatedWith(WhiteBox.class)) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             if (element.getKind() != ElementKind.CLASS) {
                 messager.printMessage(Diagnostic.Kind.ERROR, "Can only be applied to a class.");
                 return false;
@@ -70,7 +63,6 @@ public class WhiteBoxProcessor extends AbstractProcessor {
             }
         }
         for (Element element : environment.getElementsAnnotatedWith(WhiteBoxes.class)) {
-            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             if (element.getKind() != ElementKind.CLASS) {
                 messager.printMessage(Diagnostic.Kind.ERROR, "Can only be applied to a class.");
                 return false;
@@ -115,8 +107,7 @@ public class WhiteBoxProcessor extends AbstractProcessor {
             WhiteBoxClassGenerator generator = new WhiteBoxClassGenerator(
                     targetClass,
                     annotation.depth(),
-                    annotation.value(),
-                    element.getClass().getPackage().getName());
+                    annotation.value());
             return generator.generateSource();
         } catch (Exception e) {
             e.printStackTrace();

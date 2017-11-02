@@ -65,7 +65,7 @@ class VisibilityFilter {
      * @param modifier Given white box depth.
      * @return True if visible, false otherwise.
      */
-    @SuppressWarnings({"magicnumber", "fallthrough"})
+    @SuppressWarnings({"magicnumber", "fallthrough", "PMD.CyclomaticComplexity"})
     private boolean isVisible(int modifier) {
         switch (depth.ordinal()) {
             case 3:

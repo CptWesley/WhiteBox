@@ -18,19 +18,17 @@ class WhiteBoxClassGenerator {
     @Getter private Class target;
     @Getter private VisibilityFilter visibilityFilter;
     @Getter private String name;
-    @Getter private String packageDestination;
 
     /**
      * Constructor for a white box class generator.
      * @param target Target class.
      * @param depth Depth to generate to.
+     * @param name Name of the new class.
      */
-    WhiteBoxClassGenerator(Class target, WhiteBoxDepth depth,
-                           String name, String packageDestination) {
+    WhiteBoxClassGenerator(Class target, WhiteBoxDepth depth, String name) {
         this.target = target;
         this.visibilityFilter = new VisibilityFilter(target, depth);
         this.name = name;
-        this.packageDestination = packageDestination;
     }
 
     /**
@@ -132,8 +130,8 @@ class WhiteBoxClassGenerator {
 
         builder.addCode("try {\n")
                 .addStatement(
-                        "java.lang.reflect.Method m = object.getClass().getDeclaredMethod(\"$L\"$L)",
-                        method.getName(), getParameterTypeString(parameterTypes))
+                "java.lang.reflect.Method m = object.getClass().getDeclaredMethod(\"$L\"$L)",
+                 method.getName(), getParameterTypeString(parameterTypes))
                 .addStatement("m.setAccessible(true)")
                 .addStatement("$Lm.invoke(object$L)",
                         getReturnString(method),

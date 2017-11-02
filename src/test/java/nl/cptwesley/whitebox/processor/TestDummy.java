@@ -6,6 +6,7 @@ import org.junit.Ignore;
  * Dummy class used for testing.
  */
 @Ignore
+@SuppressWarnings({"checkstyle", "PMD"})
 public class TestDummy {
 
     private String name;
