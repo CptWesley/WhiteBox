@@ -95,4 +95,9 @@ public class TestDummy {
     private String getName() {
         return this.name;
     }
+
+    /**
+     * Dummy method that does nothing.
+     */
+    public void doNothing() {}
 }

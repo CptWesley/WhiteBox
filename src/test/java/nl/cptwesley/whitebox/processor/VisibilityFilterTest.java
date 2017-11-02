@@ -44,9 +44,9 @@ class VisibilityFilterTest {
      */
     @ParameterizedTest
     @CsvSource({
-            "Public, 1",
-            "Protected, 2",
-            "Package, 3"
+            "Public, 2",
+            "Protected, 3",
+            "Package, 4"
     })
     void visibleMethodsTest(WhiteBoxDepth depth, int amount) {
         filter = new VisibilityFilter(TestDummy.class, depth);
