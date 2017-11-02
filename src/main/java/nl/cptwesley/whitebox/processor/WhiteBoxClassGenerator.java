@@ -37,7 +37,7 @@ class WhiteBoxClassGenerator {
      * Generates the source code of the whiteboxed class.
      * @return Source code of the whiteboxed class.
      */
-    String generateSource() {
+    TypeSpec generateSource() {
         List<Constructor> constructors = visibilityFilter.getConstructors();
         List<Method> methods = visibilityFilter.getMethods();
 
@@ -54,7 +54,7 @@ class WhiteBoxClassGenerator {
             whiteBoxedClass.addMethod(getMethodSpec(method));
         }
 
-        return "package " + packageDestination + ";\n" + whiteBoxedClass.build().toString();
+        return whiteBoxedClass.build();
     }
 
     /**
