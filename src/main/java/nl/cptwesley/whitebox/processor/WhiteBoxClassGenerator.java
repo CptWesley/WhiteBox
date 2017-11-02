@@ -8,7 +8,6 @@ import nl.cptwesley.whitebox.WhiteBoxDepth;
 import javax.lang.model.element.Modifier;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 /**
