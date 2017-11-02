@@ -1,8 +1,11 @@
 package nl.cptwesley.whitebox.processor;
 
+import org.junit.Ignore;
+
 /**
  * Dummy class used for testing.
  */
+@Ignore
 public class TestDummy {
 
     private String name;
