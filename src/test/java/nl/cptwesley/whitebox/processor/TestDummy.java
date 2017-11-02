@@ -3,14 +3,14 @@ package nl.cptwesley.whitebox.processor;
 /**
  * Dummy class used for testing.
  */
-public class ExampleTargetClass {
+public class TestDummy {
 
     private String name;
 
     /**
      * Empty public constructor.
      */
-    public ExampleTargetClass() {
+    public TestDummy() {
         this.name = "default";
     }
 
@@ -18,7 +18,7 @@ public class ExampleTargetClass {
      * Public constructor.
      * @param name Arg0.
      */
-    public ExampleTargetClass(String name) {
+    public TestDummy(String name) {
         this.name = name;
     }
 
@@ -27,7 +27,7 @@ public class ExampleTargetClass {
      * @param name Arg0.
      * @param a1 Arg1.
      */
-    protected ExampleTargetClass(String name, int a1) {
+    protected TestDummy(String name, int a1) {
         this.name = name;
     }
 
@@ -37,7 +37,7 @@ public class ExampleTargetClass {
      * @param a1 Arg1.
      * @param a2 Arg2.
      */
-    ExampleTargetClass(String name, int a1, int a2) {
+    TestDummy(String name, int a1, int a2) {
         this.name = name;
     }
 
@@ -48,7 +48,7 @@ public class ExampleTargetClass {
      * @param a2 Arg2.
      * @param a3 Arg3.
      */
-    private ExampleTargetClass(String name, int a1, int a2, int a3) {
+    private TestDummy(String name, int a1, int a2, int a3) {
         this.name = name;
     }
 
