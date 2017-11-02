@@ -75,7 +75,6 @@ public class WhiteBoxProcessor extends AbstractProcessor {
                     targetClass,
                     annotation.depth(),
                     annotation.value(),
-                    //"TestWhiteBox",
                     element.getClass().getPackage().getName());
             return generator.generateSource();
         } catch (Exception e) {
