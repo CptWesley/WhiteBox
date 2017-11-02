@@ -4,8 +4,16 @@ import com.google.auto.service.AutoService;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import nl.cptwesley.whitebox.WhiteBox;
+import nl.cptwesley.whitebox.WhiteBoxes;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.Messager;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -19,7 +27,10 @@ import java.util.Set;
 /**
  * Annotation processor for the @WhiteBox annotation.
  */
-@SupportedAnnotationTypes({"nl.cptwesley.whitebox.WhiteBox"})
+@SupportedAnnotationTypes({
+        "nl.cptwesley.whitebox.WhiteBox",
+        "nl.cptwesley.whitebox.WhiteBoxes"
+})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
 public class WhiteBoxProcessor extends AbstractProcessor {
@@ -47,28 +58,58 @@ public class WhiteBoxProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment environment) {
         for (Element element : environment.getElementsAnnotatedWith(WhiteBox.class)) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             if (element.getKind() != ElementKind.CLASS) {
                 messager.printMessage(Diagnostic.Kind.ERROR, "Can only be applied to a class.");
+                return false;
+            }
+            TypeElement typeElement = (TypeElement) element;
+            WhiteBox annotation = element.getAnnotation(WhiteBox.class);
+            if (!generateClass(typeElement, annotation)) {
                 return true;
             }
-
+        }
+        for (Element element : environment.getElementsAnnotatedWith(WhiteBoxes.class)) {
+            System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            if (element.getKind() != ElementKind.CLASS) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "Can only be applied to a class.");
+                return false;
+            }
             TypeElement typeElement = (TypeElement) element;
-            WhiteBox annotation = typeElement.getAnnotation(WhiteBox.class);
-            TypeSpec newClass = generateClass(typeElement, annotation);
-
-            try {
-                JavaFile.builder(typeElement.getEnclosingElement().toString(), newClass)
-                        .build()
-                        .writeTo(filer);
-            } catch (IOException e) {
-                messager.printMessage(Diagnostic.Kind.ERROR, "Error operating on file.");
-                return true;
+            for (WhiteBox annotation : element.getAnnotationsByType(WhiteBox.class)) {
+                if (!generateClass(typeElement, annotation)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    private static TypeSpec generateClass(TypeElement element, WhiteBox annotation) {
+    /**
+     * Generates class source file.
+     * @param element Element that was annotated.
+     * @param annotation Annotation on the method.
+     */
+    private boolean generateClass(TypeElement element, WhiteBox annotation) {
+        TypeSpec newClass = generateTypeSpec(element, annotation);
+        try {
+            JavaFile.builder(element.getEnclosingElement().toString(), newClass)
+                    .build()
+                    .writeTo(filer);
+        } catch (IOException e) {
+            messager.printMessage(Diagnostic.Kind.ERROR, "Error operating on file.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Generates a Java Poet TypeSpec.
+     * @param element Element that was annotated.
+     * @param annotation Annotation on the class.
+     * @return
+     */
+    private static TypeSpec generateTypeSpec(TypeElement element, WhiteBox annotation) {
         try {
             Class targetClass = Class.forName(annotation.target());
             WhiteBoxClassGenerator generator = new WhiteBoxClassGenerator(
